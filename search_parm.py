@@ -11,15 +11,16 @@ class neuralNetwork:
         self.inodes = D_in
         self.hnodes = H
         self.onodes = D_out
-
-        # 创建权重矩阵
-        self.w1 = np.random.randn(self.inodes, self.hnodes)
-        self.w2 = np.random.randn(self.hnodes, self.onodes)
         self.train_loss = []
         self.test_loss = []
         self.test_accuracy = []
         self.x_train, self.y_train, self.x_test, self.y_test = self.load_data()
 
+        # 创建权重矩阵
+        self.w1 = np.random.randn(self.inodes, self.hnodes)
+        self.w2 = np.random.randn(self.hnodes, self.onodes)
+
+        # 如果有构建好的模型参数，直接加载
         if os.path.exists("D:/Code/pythonProject1/data/json_w1.txt"):
             self.w1 = np.loadtxt("D:/Code/pythonProject1/data/json_w1.txt")
         else:
@@ -71,7 +72,7 @@ class neuralNetwork:
         x_temp = self.x_train[sample, :]
         dy_pred_pre = y_pred_temp - y_temp
         dw2 = h_temp.T.dot(dy_pred_pre) + nu * np.ones(
-            self.w2.shape)  # h_relu是（64，100）维的矩阵，grad_y_pred是（64，10）维的矩阵，要想相乘，把h_relu进行转置，即h_relu.T
+            self.w2.shape)
         dh = dy_pred_pre.dot(self.w2.T)
         dw1 = x_temp.T.dot(dh * (h_temp * (1 - h_temp))) + nu * np.ones(self.w1.shape)
 
